@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Cosmos.Core.Memory;
 using IL2CPU.API.Attribs;
 
 namespace Cosmos.Core.Processing
@@ -33,12 +32,12 @@ namespace Cosmos.Core.Processing
             while (true) { } // remove from thread pool later
         }
 
-        public static uint TickFrequency = 1;
-
         public static void SwitchTask()
         {
             if (ProcessContext.m_CurrentContext != null)
             {
+                CPU.DisableInterrupts();
+
                 ProcessContext.Context ctx = ProcessContext.m_ContextList;
                 ProcessContext.Context last = ctx;
                 while (ctx != null)
@@ -56,9 +55,7 @@ namespace Cosmos.Core.Processing
                 {
                     if (ctx.state == ProcessContext.Thread_State.WAITING_SLEEP)
                     {
-                        ctx.arg -= 1000 / (int)TickFrequency;
-                        Cosmos.Core.Global.debugger.Send("ctx.arg=" + ctx.arg);
-                        Cosmos.Core.Global.debugger.Send("TickFrequency=" + TickFrequency);
+                        ctx.arg -= 10; //Since Local APIC Frequency = 100Hz remove 10ms per interrupt
                         if (ctx.arg <= 0)
                         {
                             ctx.state = ProcessContext.Thread_State.ALIVE;
@@ -68,7 +65,7 @@ namespace Cosmos.Core.Processing
                     ctx = ctx.next;
                 }
                 ProcessContext.m_CurrentContext.esp = INTs.mStackContext;
-            tryagain:;
+            tryagain:
                 if (ProcessContext.m_CurrentContext.next != null)
                 {
                     ProcessContext.m_CurrentContext = ProcessContext.m_CurrentContext.next;
@@ -83,6 +80,8 @@ namespace Cosmos.Core.Processing
                 }
                 ProcessContext.m_CurrentContext.age = ProcessContext.m_CurrentContext.priority;
                 INTs.mStackContext = ProcessContext.m_CurrentContext.esp;
+
+                CPU.EnableInterrupts();
             }
 
             LocalAPIC.EndOfInterrupt();

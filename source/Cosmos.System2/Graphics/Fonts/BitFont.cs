@@ -112,7 +112,7 @@ namespace Cosmos.System.Graphics.Fonts
                     {
                         if ((Font[(h * (Size / 8)) + aw] & (0x80 >> ww)) != 0)
                         {
-                            canvas.DrawPoint(new Pen(Color), X + (aw * 8) + ww, Y + h);
+                            canvas.DrawPoint(Color, X + (aw * 8) + ww, Y + h);
 
                             if ((aw * 8) + ww > MaxX)
                             {
@@ -123,7 +123,7 @@ namespace Cosmos.System.Graphics.Fonts
                             {
                                 if (UseAntiAliasing)
                                 {
-                                    canvas.DrawPoint(new Pen(Color.FromArgb(Color.R / 2, Color.G / 2, Color.B / 2)), X + (aw * 8) + ww - 1, Y + h);
+                                    canvas.DrawPoint(Color.FromArgb(Color.R / 2, Color.G / 2, Color.B / 2), X + (aw * 8) + ww - 1, Y + h);
                                 }
 
                                 LastPixelIsNotDrawn = false;

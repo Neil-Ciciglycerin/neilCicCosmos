@@ -399,7 +399,7 @@ namespace Cosmos.System.Graphics
         /// <param name="yCenter">The Y center coordinate.</param>
         /// <param name="xR">The X radius.</param>
         /// <param name="yR">The Y radius.</param>
-        public virtual void DrawFilledEllipse(Color color, int xCenter, int yCenter, int xR, int yR)
+        public virtual void DrawFilledEllipse(Color color, int xCenter, int yCenter, int yR, int xR)
         {
             for (int y = -yR; y <= yR; y++)
             {
@@ -641,10 +641,7 @@ namespace Cosmos.System.Graphics
                 for (int yi = 0; yi < image.Height; yi++)
                 {
                     color = Color.FromArgb(image.RawData[xi + (yi * image.Width)]);
-                    if (color.A > 0)
-                    {
-                        DrawPoint(color, x + xi, y + yi);
-                    }
+                    DrawPoint(color, x + xi, y + yi);
                 }
             }
         }

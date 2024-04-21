@@ -21,7 +21,7 @@ namespace Cosmos.System.Graphics.Fonts
     /// <summary>
     /// For More https://github.com/nifanfa/BitFont
     /// </summary>
-    static class BitFont
+    public static class BitFont
     {
         public static Dictionary<string, BitFontDescriptor> RegisteredBitFont = new Dictionary<string, BitFontDescriptor>();
 
